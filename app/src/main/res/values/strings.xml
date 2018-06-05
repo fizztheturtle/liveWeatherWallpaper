@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">liveWeatherWallpaper</string>
+    <string name="show_gif">Show Gif</string>
+    <string name="show_gallery">Show Gallery</string>
 </resources>
