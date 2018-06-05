@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 
-public class gifsActivity extends AppCompatActivity {
+public class GifsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
