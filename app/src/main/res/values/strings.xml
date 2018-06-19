@@ -2,4 +2,14 @@
     <string name="app_name">liveWeatherWallpaper</string>
     <string name="show_gif">Show Gif</string>
     <string name="show_gallery">Show Gallery</string>
+    <string name="title_activity_tabbed">tabbedActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="tab_text_1">Sunny</string>
+    <string name="tab_text_2">Rain</string>
+    <string name="tab_text_3">Cloudy</string>
+    <string name="import_an_image">Import an Image</string>
+    <string name="set_wallpaper_when_sunny">set wallpaper when sunny</string>
+    <string name="error">"NO wallpaper found"</string>
 </resources>
