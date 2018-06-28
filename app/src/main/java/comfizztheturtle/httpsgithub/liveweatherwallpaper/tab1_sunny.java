@@ -9,12 +9,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 
 import android.os.Bundle;
 
-import android.provider.MediaStore;
+
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 
@@ -36,7 +35,7 @@ import static com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUE
 
 public class tab1_sunny extends Fragment {
 
-    private CropImageView mCropImageView;
+
     int PICK_IMAGE_REQUEST = 1;
     private View image;
     private Uri mSelectedImageUri;
@@ -114,11 +113,7 @@ public class tab1_sunny extends Fragment {
 
 
     }
-    public void onCropImageClick(View view) {
-        Bitmap cropped =  mCropImageView.getCroppedImage(500, 500);
-        if (cropped != null)
-            mCropImageView.setImageBitmap(cropped);
-    }
+
     @Override
     @SuppressLint("NewApi")
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
