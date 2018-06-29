@@ -1,35 +1,22 @@
 package comfizztheturtle.httpsgithub.liveweatherwallpaper;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-
-import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-
-import android.graphics.Bitmap;
 import android.net.Uri;
-
 import android.os.Bundle;
-
-
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import static android.app.Activity.RESULT_OK;
 import static com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE;
@@ -37,17 +24,25 @@ import static com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUE
 
 public class tab1_sunny extends Fragment {
 
-
+    int sunny_weather_id = 0;
     int PICK_IMAGE_REQUEST = 1;
     private View image;
     private Uri mSelectedImageUri;
+    public MyDBHandler dbHandler;
+    public static final String DATABASE_NAME = "studentDB.db";
+    ImageView new_image_device;
+
+//    1st= image
+//    studentname=mSelectedImageUri;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        dbHandler = new MyDBHandler(this.getContext());
         View v = inflater.inflate(R.layout.tab1_sunny, container, false);
         image=v;
-        ImageView new_image_device =image.findViewById(R.id.image_device);
+
+        new_image_device =image.findViewById(R.id.image_device);
 
         if (mSelectedImageUri != null) {
             new_image_device.setImageURI(mSelectedImageUri);
@@ -63,10 +58,9 @@ public class tab1_sunny extends Fragment {
             // Show only images, no videos or anything else
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
+
             // Always show the chooser (if there are multiple options available)
                   startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-
-
 
                 }catch(Exception exp){
                     Log.e("Error",exp.toString());
@@ -135,12 +129,13 @@ public class tab1_sunny extends Fragment {
         }
         else if (requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(intent);
-            Log.e("MyApp","I have succeeded");
+
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
-
+                mSelectedImageUri=resultUri;
                 ImageView new_image_device =image.findViewById(R.id.image_device);
                 new_image_device.setImageURI(resultUri );
+                add_weather_image(image);
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -176,12 +171,11 @@ public class tab1_sunny extends Fragment {
         Intent intent = CropImage.activity(imageUri)
                 .getIntent(getContext());
         startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-//        ImageView new_image_device =image.findViewById(R.id.image_device);
-//        new_image_device.setImageURI(imageUri );
+
 
     }
 
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], int[] grantResults) {
         if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
             if (mSelectedImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // required permissions granted, start crop image activity
@@ -192,6 +186,39 @@ public class tab1_sunny extends Fragment {
             }
         }
     }
+
+
+//need one for update,remove,delete... everything
+    public void add_weather_image(View view) {
+
+       if(mSelectedImageUri != null) {
+
+
+
+           int id = sunny_weather_id;
+           String link_to_file =(mSelectedImageUri.toString());
+//        Uri ltf = Uri.parse(link_to_file);
+           image_class weather_image = new image_class(id, link_to_file);
+           dbHandler.addHandler(weather_image);
+           String result=dbHandler.loadHandler();
+           Log.e("MyApp",result);
+
+       }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 //    private void reloadWallpaper(Bitmap bm){
 //        if(bm != null){

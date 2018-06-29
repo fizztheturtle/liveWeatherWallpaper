@@ -1,23 +1,38 @@
 package comfizztheturtle.httpsgithub.liveweatherwallpaper;
 
-import android.media.Image;
-
-import java.net.URI;
 
 public class image_class {
 
-    private URI link_to_file;
-    private String id_weather_type;
+    private String link_to_file;
+    private int id_weather_type;
 
-    public image_class() {}
+    image_class() {}
 
-    public void image_location(String id_weather_type, URI link_to_file)
-    {
+    image_class(int id_weather_type, String link_to_file) {
         this.id_weather_type =id_weather_type;
         this.link_to_file= link_to_file;
     }
 
 
+    public void set_ID(int id)
+    {
+     this.id_weather_type = id;
+    }
+
+    public int get_ID()
+    {
+        return this.id_weather_type ;
+    }
+
+    public void set_link_to_file(String ltf)
+    {
+        this.link_to_file = ltf;
+    }
+
+    public String get_link_to_file()
+    {
+        return this.link_to_file ;
+    }
 
 
 

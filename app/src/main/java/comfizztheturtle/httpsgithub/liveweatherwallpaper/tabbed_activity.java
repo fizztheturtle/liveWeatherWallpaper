@@ -1,5 +1,6 @@
 package comfizztheturtle.httpsgithub.liveweatherwallpaper;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import static comfizztheturtle.httpsgithub.liveweatherwallpaper.MyDBHandler.COLUMN_ID;
+import static comfizztheturtle.httpsgithub.liveweatherwallpaper.MyDBHandler.COLUMN_NAME;
+import static comfizztheturtle.httpsgithub.liveweatherwallpaper.MyDBHandler.TABLE_NAME;
 
 public class tabbed_activity extends AppCompatActivity {
 
@@ -33,10 +38,13 @@ public class tabbed_activity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    MyDBHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tabbed_activity);
+        db=new MyDBHandler(getApplicationContext());
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
