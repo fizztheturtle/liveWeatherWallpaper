@@ -23,9 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -58,10 +60,10 @@ public class tab1_sunny extends Fragment {
                 try{
                     Intent intent = new Intent();
 
-// Show only images, no videos or anything else
+            // Show only images, no videos or anything else
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
-// Always show the chooser (if there are multiple options available)
+            // Always show the chooser (if there are multiple options available)
                   startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
 
 
@@ -113,6 +115,15 @@ public class tab1_sunny extends Fragment {
 
 
     }
+
+//sunny=id_0
+
+//etc...
+
+
+//When removing, replaces current image for that id
+
+//when entering, replaces current default image for id
 
     @Override
     @SuppressLint("NewApi")
