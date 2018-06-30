@@ -27,7 +27,7 @@ public class tab1_sunny extends Fragment {
     int sunny_weather_id = 0;
     int PICK_IMAGE_REQUEST = 1;
     private View image;
-    private Uri mSelectedImageUri;
+    private Uri m_image_Uri;
     public MyDBHandler dbHandler;
     public static final String DATABASE_NAME = "studentDB.db";
     ImageView new_image_device;
@@ -44,8 +44,8 @@ public class tab1_sunny extends Fragment {
 
         new_image_device =image.findViewById(R.id.image_device);
 
-        if (mSelectedImageUri != null) {
-            new_image_device.setImageURI(mSelectedImageUri);
+        if (m_image_Uri != null) {
+            new_image_device.setImageURI(m_image_Uri);
         }
 
         Button get_image_button = v.findViewById(R.id.get_image_button);
@@ -72,7 +72,7 @@ public class tab1_sunny extends Fragment {
             @Override
             public void onClick(View v) {
                 try{
-                    if (mSelectedImageUri != null) {
+                    if (m_image_Uri != null) {
 //                    Intent intent2 = new Intent(WallpaperManager.ACTION_CROP_AND_SET_WALLPAPER);
 //                    String mime = "image/*";
 
@@ -81,7 +81,7 @@ public class tab1_sunny extends Fragment {
                          Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
 //                         intent.setAction(WallpaperManager.ACTION_CROP_AND_SET_WALLPAPER);
                          intent.addCategory(Intent.CATEGORY_DEFAULT);
-                         intent.setDataAndType(mSelectedImageUri, "image/*");
+                         intent.setDataAndType(m_image_Uri, "image/*");
                          intent.putExtra("mimeType", "image/*");
                          try {
                              getActivity().startActivity(Intent.createChooser(intent, "Set as:"));
@@ -132,10 +132,21 @@ public class tab1_sunny extends Fragment {
 
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
-                mSelectedImageUri=resultUri;
-                ImageView new_image_device =image.findViewById(R.id.image_device);
-                new_image_device.setImageURI(resultUri );
-                add_weather_image(image);
+                if(m_image_Uri == null)
+                {
+                    m_image_Uri=resultUri;
+                    ImageView new_image_device =image.findViewById(R.id.image_device);
+                    new_image_device.setImageURI(resultUri );
+                    add_weather_image();
+                }
+                else{
+                    m_image_Uri=resultUri;
+                    ImageView new_image_device =image.findViewById(R.id.image_device);
+                    new_image_device.setImageURI(resultUri );
+                    update_weather_image(sunny_weather_id,m_image_Uri.toString());
+
+                }
+
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -144,8 +155,8 @@ public class tab1_sunny extends Fragment {
         }
         else if (requestCode == PICK_IMAGE_REQUEST) {
 
-                mSelectedImageUri  = intent.getData();
-            startCropImageActivity(mSelectedImageUri);
+                m_image_Uri  = intent.getData();
+            startCropImageActivity(m_image_Uri);
 
 
 //                try {
@@ -177,9 +188,9 @@ public class tab1_sunny extends Fragment {
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], int[] grantResults) {
         if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
-            if (mSelectedImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (m_image_Uri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // required permissions granted, start crop image activity
-                startCropImageActivity(mSelectedImageUri);
+                startCropImageActivity(m_image_Uri);
             } else {
                 Snackbar.make(image, "Permission required", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -189,14 +200,12 @@ public class tab1_sunny extends Fragment {
 
 
 //need one for update,remove,delete... everything
-    public void add_weather_image(View view) {
+    public void add_weather_image() {
 
-       if(mSelectedImageUri != null) {
-
-
+       if(m_image_Uri != null) {
 
            int id = sunny_weather_id;
-           String link_to_file =(mSelectedImageUri.toString());
+           String link_to_file =(m_image_Uri.toString());
 //        Uri ltf = Uri.parse(link_to_file);
            image_class weather_image = new image_class(id, link_to_file);
            dbHandler.addHandler(weather_image);
@@ -208,13 +217,24 @@ public class tab1_sunny extends Fragment {
 
 
 
+    public void update_weather_image(int ID, String ltf) {
 
 
+        if(ltf!=null) {
+            dbHandler.update_ltf(ID, ltf);
+        }
+            String result=dbHandler.loadHandler();
+            Log.e("MyApp",result);
 
+    }
 
+    public void delete_weather_image(int ID){
 
+            dbHandler.deleteHandler(ID);
 
-
+        String result=dbHandler.loadHandler();
+        Log.e("MyApp",result);
+    }
 
 
 
