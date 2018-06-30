@@ -32,8 +32,7 @@ public class tab1_sunny extends Fragment {
     public static final String DATABASE_NAME = "studentDB.db";
     ImageView new_image_device;
 
-//    1st= image
-//    studentname=mSelectedImageUri;
+//    add a method which makes the image at max 2k before being set in image view
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
