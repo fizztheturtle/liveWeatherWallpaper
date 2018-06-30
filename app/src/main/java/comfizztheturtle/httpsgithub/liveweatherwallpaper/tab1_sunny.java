@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +19,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.theartofdev.edmodo.cropper.CropImage;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
 import static com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE;
@@ -138,21 +143,37 @@ public class tab1_sunny extends Fragment {
 
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
-                if(m_image_Uri == null)
-                {
-                    m_image_Uri=resultUri;
-                    ImageView new_image_device =image.findViewById(R.id.image_device);
-                    new_image_device.setImageURI(resultUri );
-                    add_weather_image();
-                }
-                else{
-                    m_image_Uri=resultUri;
-                    ImageView new_image_device =image.findViewById(R.id.image_device);
-                    new_image_device.setImageURI(resultUri );
-                    update_weather_image(sunny_weather_id,m_image_Uri.toString());
 
-                }
+                //needs to be a scale factor of 2
 
+
+
+                try {
+//                    only scale if over 1080
+                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                    int scaleFactor=CalculateInSampleSize(bitmapOptions, 368, 253);
+                    bitmapOptions.inSampleSize = scaleFactor;
+                    InputStream inputStream = getActivity().getApplicationContext().getContentResolver().openInputStream(resultUri);
+                    Bitmap scaledBitmap = BitmapFactory.decodeStream(inputStream, null, bitmapOptions);
+
+
+                    if(m_image_Uri == null)
+                    {
+                        m_image_Uri=resultUri;
+                        ImageView new_image_device =image.findViewById(R.id.image_device);
+                        new_image_device.setImageBitmap(scaledBitmap);
+                        add_weather_image();
+                    }
+                    else{
+                        m_image_Uri=resultUri;
+                        ImageView new_image_device =image.findViewById(R.id.image_device);
+                        new_image_device.setImageBitmap(scaledBitmap);
+                        update_weather_image(sunny_weather_id,m_image_Uri.toString());
+
+                    }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -204,8 +225,31 @@ public class tab1_sunny extends Fragment {
         }
     }
 
+    // A method which will calculate the InSampleSize value as a power of 2 based on target width and height
+    public static int CalculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
+    {
+        // Raw height and width of image
+        float height = options.outHeight;
+        float width = options.outWidth;
+        double inSampleSize = 1D;
 
-//need one for update,remove,delete... everything
+        if (height > reqHeight || width > reqWidth)
+        {
+            int halfHeight = (int)(height / 2);
+            int halfWidth = (int)(width / 2);
+
+            // Calculate a inSampleSize that is a power of 2 - the decoder will use a value that is a power of two anyway.
+            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth)
+            {
+                inSampleSize *= 2;
+            }
+        }
+
+        return (int)inSampleSize;
+    }
+
+
+    //need one for update,remove,delete... everything
     public void add_weather_image() {
 
        if(m_image_Uri != null) {
