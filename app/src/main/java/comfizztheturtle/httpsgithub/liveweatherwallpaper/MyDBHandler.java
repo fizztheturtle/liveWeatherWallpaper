@@ -77,6 +77,24 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return weather_result;
     }
 
+    public image_class find_ID(int ID) {
+        String query = "Select * FROM " + TABLE_NAME + " WHERE "
+                + COLUMN_ID + " = " + "'" + ID + "'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        image_class weather_result = new image_class();
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            weather_result.set_ID(Integer.parseInt(cursor.getString(0)));
+            weather_result.set_link_to_file(cursor.getString(1));
+            cursor.close();
+        } else {
+            weather_result = null;
+        }
+        db.close();
+        return weather_result;
+    }
+
     public boolean deleteHandler(int ID) {
 
         boolean result = false;

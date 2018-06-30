@@ -21,7 +21,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import static android.app.Activity.RESULT_OK;
 import static com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE;
 
-
+//NEED TO ADD COMPRESS IMAGE FEATURE
 public class tab1_sunny extends Fragment {
 
     int sunny_weather_id = 0;
@@ -44,6 +44,13 @@ public class tab1_sunny extends Fragment {
         new_image_device =image.findViewById(R.id.image_device);
 
         if (m_image_Uri != null) {
+            new_image_device.setImageURI(m_image_Uri);
+        }
+        else if (dbHandler.find_ID(sunny_weather_id) != null && m_image_Uri == null) {
+            image_class result=dbHandler.find_ID(sunny_weather_id);
+            Uri ltf = Uri.parse(result.get_link_to_file());
+            Log.e("My App",result.get_link_to_file() );
+            m_image_Uri=ltf;
             new_image_device.setImageURI(m_image_Uri);
         }
 
