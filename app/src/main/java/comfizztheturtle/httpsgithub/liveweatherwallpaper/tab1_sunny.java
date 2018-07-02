@@ -35,8 +35,8 @@ public class tab1_sunny extends Fragment {
     private Bitmap selectedImage;
     private Uri m_image_Uri;
     public MyDBHandler dbHandler;
-    public static final String DATABASE_NAME = "studentDB.db";
-    private ByteArrayOutputStream stream;
+//    public static final String DATABASE_NAME = "studentDB.db";
+//    private ByteArrayOutputStream stream;
     ImageView new_image_device;
 
     @Override
@@ -61,16 +61,14 @@ public class tab1_sunny extends Fragment {
             Log.e("My App",result.get_link_to_file() );
             BitmapFactory.Options options = new BitmapFactory.Options();
             int uri_width= getIMGwidth(m_image_Uri);
-            int uri_height= getIMGheight(m_image_Uri);
             // downsizing image as it throws OutOfMemory Exception for larger
             // images
             Log.e("MyApp", Integer.toString(uri_width));
-            Log.e("MyApp", Integer.toString(uri_height));
             // downsizing image as it throws OutOfMemory Exception for larger images
             if (uri_width>=2560) {
                 options.inSampleSize = 8;
             }
-            else if(uri_width<=2560){
+            else {
                 options.inSampleSize=2;
             }
             selectedImage = BitmapFactory.decodeFile(ltf.getPath(),options);
@@ -177,7 +175,7 @@ public class tab1_sunny extends Fragment {
                     if (uri_width>=2560) {
                         options.inSampleSize = 8;
                     }
-                    else if(uri_width<=2560){
+                    else {
                         options.inSampleSize=2;
                     }
                     selectedImage = BitmapFactory.decodeFile(m_image_Uri.getPath(),options);
