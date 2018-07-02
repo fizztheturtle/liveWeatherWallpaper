@@ -20,8 +20,8 @@ import android.widget.ImageView;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 import static android.app.Activity.RESULT_OK;
 import static com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE;
@@ -32,12 +32,12 @@ public class tab1_sunny extends Fragment {
     int sunny_weather_id = 0;
     int PICK_IMAGE_REQUEST = 1;
     private View image;
+    private Bitmap selectedImage;
     private Uri m_image_Uri;
     public MyDBHandler dbHandler;
     public static final String DATABASE_NAME = "studentDB.db";
+    private ByteArrayOutputStream stream;
     ImageView new_image_device;
-
-//    add a method which makes the image at max 2k before being set in image view
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,15 +48,33 @@ public class tab1_sunny extends Fragment {
 
         new_image_device =image.findViewById(R.id.image_device);
 
-        if (m_image_Uri != null) {
-            new_image_device.setImageURI(m_image_Uri);
+        if (selectedImage != null) {
+
+                         new_image_device.setImageBitmap(selectedImage);
         }
-        else if (dbHandler.find_ID(sunny_weather_id) != null && m_image_Uri == null) {
+
+        else if (dbHandler.find_ID(sunny_weather_id) != null && selectedImage == null) {
+
             image_class result=dbHandler.find_ID(sunny_weather_id);
             Uri ltf = Uri.parse(result.get_link_to_file());
+
             Log.e("My App",result.get_link_to_file() );
-            m_image_Uri=ltf;
-            new_image_device.setImageURI(m_image_Uri);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            int uri_width= getIMGwidth(m_image_Uri);
+            int uri_height= getIMGheight(m_image_Uri);
+            // downsizing image as it throws OutOfMemory Exception for larger
+            // images
+            Log.e("MyApp", Integer.toString(uri_width));
+            Log.e("MyApp", Integer.toString(uri_height));
+            // downsizing image as it throws OutOfMemory Exception for larger images
+            if (uri_width>=2560) {
+                options.inSampleSize = 8;
+            }
+            else if(uri_width<=2560){
+                options.inSampleSize=2;
+            }
+            selectedImage = BitmapFactory.decodeFile(ltf.getPath(),options);
+            new_image_device.setImageBitmap(selectedImage);
         }
 
         Button get_image_button = v.findViewById(R.id.get_image_button);
@@ -90,7 +108,7 @@ public class tab1_sunny extends Fragment {
 
 //                         Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
                          Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
-//                         intent.setAction(WallpaperManager.ACTION_CROP_AND_SET_WALLPAPER);
+//                        intent.setAction(WallpaperManager.ACTION_CROP_AND_SET_WALLPAPER);
                          intent.addCategory(Intent.CATEGORY_DEFAULT);
                          intent.setDataAndType(m_image_Uri, "image/*");
                          intent.putExtra("mimeType", "image/*");
@@ -142,42 +160,45 @@ public class tab1_sunny extends Fragment {
             CropImage.ActivityResult result = CropImage.getActivityResult(intent);
 
             if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-
-                //needs to be a scale factor of 2
-
-
-
                 try {
-//                    only scale if over 1080
-                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-                    int scaleFactor=CalculateInSampleSize(bitmapOptions, 368, 253);
-                    bitmapOptions.inSampleSize = scaleFactor;
-                    InputStream inputStream = getActivity().getApplicationContext().getContentResolver().openInputStream(resultUri);
-                    Bitmap scaledBitmap = BitmapFactory.decodeStream(inputStream, null, bitmapOptions);
 
+                    Uri resultUri = result.getUri();
+                    m_image_Uri = resultUri;
+                    // bimatp factory
+                    BitmapFactory.Options options = new BitmapFactory.Options();
 
-                    if(m_image_Uri == null)
-                    {
-                        m_image_Uri=resultUri;
-                        ImageView new_image_device =image.findViewById(R.id.image_device);
-                        new_image_device.setImageBitmap(scaledBitmap);
-                        add_weather_image();
+                    int uri_width= getIMGwidth(m_image_Uri);
+                    int uri_height= getIMGheight(m_image_Uri);
+
+                    Log.e("MyApp", Integer.toString(uri_width));
+                    Log.e("MyApp", Integer.toString(uri_height));
+                    // downsizing image as it throws OutOfMemory Exception for larger
+                    // images
+                    if (uri_width>=2560) {
+                        options.inSampleSize = 8;
                     }
-                    else{
-                        m_image_Uri=resultUri;
-                        ImageView new_image_device =image.findViewById(R.id.image_device);
-                        new_image_device.setImageBitmap(scaledBitmap);
-                        update_weather_image(sunny_weather_id,m_image_Uri.toString());
-
+                    else if(uri_width<=2560){
+                        options.inSampleSize=2;
                     }
-            } catch (FileNotFoundException e) {
+                    selectedImage = BitmapFactory.decodeFile(m_image_Uri.getPath(),options);
+                if(m_image_Uri == null)
+                {
+                    add_weather_image();
+                }
+                else{
+                    update_weather_image(sunny_weather_id,m_image_Uri.toString());
+                }
+
+                    new_image_device.setImageBitmap(selectedImage);
+            } catch (Exception e) {
                 e.printStackTrace();
-            }
-
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
                 Log.e("MyApp","I have failed");
+
+            }
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                Log.e("MyApp",error.toString());
             }
         }
         else if (requestCode == PICK_IMAGE_REQUEST) {
@@ -225,27 +246,53 @@ public class tab1_sunny extends Fragment {
         }
     }
 
-    // A method which will calculate the InSampleSize value as a power of 2 based on target width and height
-    public static int CalculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
-    {
-        // Raw height and width of image
-        float height = options.outHeight;
-        float width = options.outWidth;
-        double inSampleSize = 1D;
+//    public Bitmap decodeSampledBitmapFromByte(byte[] res,
+//                                              int reqWidth, int reqHeight) {
+//
+//        // First decode with inJustDecodeBounds=true to check dimensions
+//        final BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inJustDecodeBounds = true;
+//        BitmapFactory.decodeByteArray(res, 0, res.length,options);
+//
+//        // Calculate inSampleSize
+//        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+//
+//        // Decode bitmap with inSampleSize set
+//        options.inJustDecodeBounds = false;
+//        return BitmapFactory.decodeByteArray(res, 0, res.length,options);
+//    }
 
-        if (height > reqHeight || width > reqWidth)
-        {
-            int halfHeight = (int)(height / 2);
-            int halfWidth = (int)(width / 2);
 
-            // Calculate a inSampleSize that is a power of 2 - the decoder will use a value that is a power of two anyway.
-            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth)
-            {
-                inSampleSize *= 2;
-            }
-        }
+//    public Bitmap scale_image(Uri resultUri) throws Exception {
+//        //Scale image
+//        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+////        int scaleFactor=CalculateInSampleSize(bitmapOptions, 368, 253);
+////        bitmapOptions.inSampleSize = scaleFactor;
+////        InputStream inputStream = getContext().getApplicationContext().getContentResolver().openInputStream(resultUri);
+////        Bitmap scaledBitmap= getResizedBitmap();
+////        return scaledBitmap;
+//
+//    }
 
-        return (int)inSampleSize;
+
+
+    private int getIMGwidth(Uri uri){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(new File(uri.getPath()).getAbsolutePath(), options);
+
+        int imageWidth = options.outWidth;
+        return imageWidth;
+
+    }
+    private int getIMGheight(Uri uri){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(new File(uri.getPath()).getAbsolutePath(), options);
+        int imageHeight = options.outHeight;
+
+        return imageHeight;
+
     }
 
 

@@ -14,20 +14,18 @@
 
         <ImageView
             android:id="@+id/image_device"
-            android:layout_width="360dp"
-            android:layout_height="255dp"
+            android:layout_width="350dp"
+            android:layout_height="299dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:adjustViewBounds="false"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
             android:src="@drawable/sunny_wallpaper"
             app:layout_constraintBottom_toTopOf="@+id/get_image_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/get_image_button"
@@ -47,7 +45,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.577" />
+            app:layout_constraintVertical_bias="0.65" />
 
         <Button
             android:id="@+id/set_sunny_wallpaper"
@@ -66,7 +64,7 @@
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/get_image_button"
-            app:layout_constraintVertical_bias="0.011" />
+            app:layout_constraintVertical_bias="0.141" />
     </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>
