@@ -38,9 +38,11 @@ public class tabbed_activity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+
     MyDBHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tabbed_activity);
         db=new MyDBHandler(getApplicationContext());

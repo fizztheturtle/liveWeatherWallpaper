@@ -9,7 +9,7 @@ import android.database.Cursor;
 public class MyDBHandler extends SQLiteOpenHelper {
     //information of database
     private static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = " studentDB.db ";
+    public static final String DATABASE_NAME = " weatherDB.db ";
     public static final String TABLE_NAME = "weather_db";
     public static final String COLUMN_ID = "id_weather_type";
     public static final String COLUMN_NAME = "link_to_file";
