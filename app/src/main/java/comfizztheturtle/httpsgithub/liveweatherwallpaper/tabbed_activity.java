@@ -48,6 +48,9 @@ public class tabbed_activity extends AppCompatActivity {
         db=new MyDBHandler(getApplicationContext());
 
 
+        //        memory leaks are possible
+        finding_data findingData = new finding_data(this);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -148,4 +151,14 @@ public class tabbed_activity extends AppCompatActivity {
         return null;
         }
     }
+
+    private void get_weather_info() throws Exception {
+        image_class weather_result = new image_class();
+        weather_result=db.find_ID(0);
+        String ltf=weather_result.get_link_to_file();
+        finding_data.get_weather(ltf);
+
+
+    }
+
 }

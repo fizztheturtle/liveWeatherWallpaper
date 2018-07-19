@@ -1,43 +1,46 @@
 package comfizztheturtle.httpsgithub.liveweatherwallpaper;
 
-
-//"Contains public sector information licensed under the Open Government Licence"
-// add a 10 counter per minute for requests
-// add a 100000 per day counter
-
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
-
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+public class finding_data{
+
+    private Context context;
+
+    public finding_data(Context current){
+        this.context = current;
+    }
+
+//    public findResource(){
+//        context.getResources().getXml(R.xml.samplexml);
+//    }
+
+    // write your code here
+    public static int get_weather(String resourceId) throws Exception {
+
+//    getResources().openRawResource(R.raw.api_key);
+//    URL url =  Find_Data.class.getResource("raw/api_key.txt");
+//        System.out.println(getResources().openRawResource(R.raw.api_key));
+//    String API_Key= Paths.get(url.toURI()).toFile().toString();
 
 
-public class Find_Data{
-
-
-//Need to implement this into one of the android classes
-    public static void main(String[] args) throws Exception {
-
-        // write your code here
-
-        URL url =  Find_Data.class.getResource("raw/api_key.txt");
-        System.out.println(url);
-        String API_Key=Paths.get(url.toURI()).toFile().toString();
-
-
-        String contents =new String(Files.readAllBytes(Paths.get(API_Key)));
+//    String contents =new String(Files.readAllBytes(Paths.get(API_Key)));
 //        String contents = BuildConfig.ApiKey;
 //
 
@@ -47,8 +50,52 @@ public class Find_Data{
 //        String link =Paths.get(url.toURI()).toFile().toString();
 
 
+//    File file = new File("assets/QuotesMonkeyBusiness.txt");
+//    InputStream is = this.getResources().openRawResource(resourceId);
+//    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String readLine = null;
+//
+//
+//
+//    try {
+//        // While the BufferedReader readLine is not null
+//        while ((readLine = br.readLine()) != null) {
+//            Log.d("TEXT", readLine);
+//        }
+//
+//        // Close the InputStream and BufferedReader
+//        is.close();
+//        br.close();
+//
+//    } catch (IOException e) {
+//        e.printStackTrace();
+//    }
+
+
+
+
+        try {
+            Resources res = context.getResources();
+            InputStream in_s = res.openRawResource(resourceId);
+
+            byte[] b = new byte[in_s.available()];
+            in_s.read(b);
+            readLine=new String(b);
+        } catch (Exception e) {
+            e.printStackTrace();
+//        txtHelp.setText("Error: can't show help.");
+        }
+
+
+
+
+
+
+
+
+
         // Make a URL to the web page
-        String url_API = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/350473?res=3hourly&key="+contents;
+        String url_API = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/310013?res=3hourly&key="+readLine;
 
         JSONObject jsonObject = readJsonFromUrl(url_API);
 
@@ -77,7 +124,7 @@ public class Find_Data{
                 String $_temp = (String) rep_2.get("$");
                 int $= Integer.parseInt($_temp);
                 String myTime = "00:00";
-                SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("HH:mm");
                 Date d = df.parse(myTime);
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(d);
@@ -88,6 +135,8 @@ public class Find_Data{
             }
 
         }
+
+        return 4;
     }
 
     public static JSONObject readJsonFromUrl(String url) throws Exception {
@@ -144,5 +193,6 @@ public class Find_Data{
         }
         return returnString.toString();
     }
+
 
 }

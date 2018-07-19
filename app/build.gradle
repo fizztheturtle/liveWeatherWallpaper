@@ -37,6 +37,7 @@ dependencies {
     //    testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
+
     implementation files('src/main/java/comfizztheturtle/httpsgithub/liveweatherwallpaper/Libraries/gson-2.8.5.jar')
     implementation files('src/main/java/comfizztheturtle/httpsgithub/liveweatherwallpaper/Libraries/json-20180130-sources.jar')
     implementation files('src/main/java/comfizztheturtle/httpsgithub/liveweatherwallpaper/Libraries/json-lib-2.4-jdk15.jar')
