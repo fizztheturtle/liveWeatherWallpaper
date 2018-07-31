@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -48,6 +49,8 @@ public class tabbed_activity extends AppCompatActivity {
     private ViewPager mViewPager;
     private boolean update_status=true;
 
+    private MenuItem item_refresh;
+
     private final static String TAG = "BroadcastService";
     MyDBHandler db;
     @Override
@@ -57,8 +60,8 @@ public class tabbed_activity extends AppCompatActivity {
         setContentView(R.layout.tabbed_activity);
         db=new MyDBHandler(getApplicationContext());
 
-        startService(new Intent(this, BroadcastService.class));
-        Log.i(TAG, "Started service");
+//        startService(new Intent(this, BroadcastService.class));
+
 
         try {
             get_weather_info();
@@ -114,7 +117,20 @@ public class tabbed_activity extends AppCompatActivity {
 
         switch (id) {
             case R.id.refresh:
-//                newGame();
+                item_refresh = item;
+                // Create a count down timer which will count 60 seconds and invoke the timer object onTick() method every second.
+                final BroadcastService myCountDownTimer = new BroadcastService(60*1000, 1000);
+                // Set count down timer source activity.
+                myCountDownTimer.setSourceActivity(this);
+                // Start the count down timer.
+                myCountDownTimer.start();
+                // Disable send verify code button.
+                item.setEnabled(false);
+
+//                AlertDialog alertDialog = new AlertDialog.Builder(CountDownTimerActivity.this).create();
+//                alertDialog.setMessage("Verification code has been send through sms. " +
+//                        "Click this button to resend 60 seconds later.");
+//                alertDialog.show();
                 return true;
             case R.id.action_settings:
 //                showHelp();
@@ -122,6 +138,30 @@ public class tabbed_activity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    /* This method will be invoked when CountDownTimer finish. */
+    public void onCountDownTimerFinishEvent()
+    {
+        item_refresh.setEnabled(true);
+    }
+
+    /* This method will be invoked when CountDownTimer tick event happened.*/
+    public void onCountDownTimerTickEvent(long millisUntilFinished)
+    {
+        // Calculate left seconds.
+        long leftSeconds = millisUntilFinished / 1000;
+
+        String sendButtonText = "Left " + leftSeconds + " (s)";
+
+        if(leftSeconds==0)
+        {
+            sendButtonText = "Send Verification Code";
+        }
+
+        // Show left seconds in send button.
+        item_refresh.setTitle(sendButtonText);
     }
 
     /**

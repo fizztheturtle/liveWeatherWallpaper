@@ -12,9 +12,9 @@ import android.os.CountDownTimer;
 public class BroadcastService extends CountDownTimer {
 
     // This variable refer to the source activity which use this CountDownTimer object.
-    private CountDownTimerActivity sourceActivity;
+    private tabbed_activity sourceActivity;
 
-    public void setSourceActivity(CountDownTimerActivity sourceActivity) {
+    public void setSourceActivity(tabbed_activity sourceActivity) {
         this.sourceActivity = sourceActivity;
     }
 
@@ -23,7 +23,7 @@ public class BroadcastService extends CountDownTimer {
     }
 
     @Override
-    public void onTick(long millisUntilFinished) {
+    public void onTick(long millisUntilFinished ) {
         if(this.sourceActivity!=null) {
             // Invoke source activity's tick event method.
             this.sourceActivity.onCountDownTimerTickEvent(millisUntilFinished);
