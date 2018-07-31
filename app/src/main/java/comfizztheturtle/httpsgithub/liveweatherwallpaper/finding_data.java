@@ -21,18 +21,15 @@ import java.util.Date;
 
 public class finding_data{
 
-    private Context context;
+//    private Context context;
 
-    public finding_data(Context current){
-        this.context = current;
-    }
 
 //    public findResource(){
 //        context.getResources().getXml(R.xml.samplexml);
 //    }
 
     // write your code here
-    public static int get_weather(String resourceId) throws Exception {
+    public static void get_weather(Context context,int resourceId) throws Exception {
 
 //    getResources().openRawResource(R.raw.api_key);
 //    URL url =  Find_Data.class.getResource("raw/api_key.txt");
@@ -53,7 +50,7 @@ public class finding_data{
 //    File file = new File("assets/QuotesMonkeyBusiness.txt");
 //    InputStream is = this.getResources().openRawResource(resourceId);
 //    BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        String readLine = null;
+
 //
 //
 //
@@ -72,7 +69,8 @@ public class finding_data{
 //    }
 
 
-
+//        resourceId= Integer.parseInt(resourceId);
+        String readLine = null;
 
         try {
             Resources res = context.getResources();
@@ -85,13 +83,6 @@ public class finding_data{
             e.printStackTrace();
 //        txtHelp.setText("Error: can't show help.");
         }
-
-
-
-
-
-
-
 
 
         // Make a URL to the web page
@@ -136,7 +127,7 @@ public class finding_data{
 
         }
 
-        return 4;
+//        return 4;
     }
 
     public static JSONObject readJsonFromUrl(String url) throws Exception {
@@ -163,7 +154,7 @@ public class finding_data{
         }
         return sb.toString();
     }
-    public String ReadFromfile(String fileName, Context context) {
+    public static String ReadFromfile(String fileName, Context context) {
         StringBuilder returnString = new StringBuilder();
         InputStream fIn = null;
         InputStreamReader isr = null;

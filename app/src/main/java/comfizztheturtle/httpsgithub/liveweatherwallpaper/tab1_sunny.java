@@ -70,11 +70,11 @@ public class tab1_sunny extends Fragment {
                     .permitAll().build();
             StrictMode.setThreadPolicy(policy);
             //your codes here
-             try {
-                        main(R.raw.api_key);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+//             try {
+//                        main(R.raw.api_key);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
 
         }
 

@@ -1,5 +1,9 @@
 package comfizztheturtle.httpsgithub.liveweatherwallpaper;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +17,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,12 +38,17 @@ public class tabbed_activity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+
+//    change broadcast service to timer
+
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private boolean update_status=true;
 
-
+    private final static String TAG = "BroadcastService";
     MyDBHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +57,15 @@ public class tabbed_activity extends AppCompatActivity {
         setContentView(R.layout.tabbed_activity);
         db=new MyDBHandler(getApplicationContext());
 
+        startService(new Intent(this, BroadcastService.class));
+        Log.i(TAG, "Started service");
 
-        //        memory leaks are possible
-        finding_data findingData = new finding_data(this);
+        try {
+            get_weather_info();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,6 +92,7 @@ public class tabbed_activity extends AppCompatActivity {
             }
         });
 
+
     }
 
 
@@ -84,6 +101,8 @@ public class tabbed_activity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main2, menu);
         return true;
+        // Handle item selection
+
     }
 
     @Override
@@ -93,12 +112,16 @@ public class tabbed_activity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.refresh:
+//                newGame();
+                return true;
+            case R.id.action_settings:
+//                showHelp();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -152,13 +175,18 @@ public class tabbed_activity extends AppCompatActivity {
         }
     }
 
+    //        memory leaks are possible
     private void get_weather_info() throws Exception {
-        image_class weather_result = new image_class();
-        weather_result=db.find_ID(0);
+        new image_class();
+        image_class weather_result = db.find_ID(0);
         String ltf=weather_result.get_link_to_file();
-        finding_data.get_weather(ltf);
-
-
+        int ltf2=Integer.parseInt(ltf);
+       finding_data.get_weather(this,ltf2);
     }
+
+
+
+
+
 
 }

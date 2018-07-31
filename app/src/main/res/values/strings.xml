@@ -12,7 +12,7 @@
     <string name="import_an_image">Import an Image</string>
     <string name="set_wallpaper_when_sunny">set wallpaper when sunny</string>
     <string name="error">"NO wallpaper found"</string>
-
+    <string name="action_refresh">Refresh</string>
 
 
 </resources>
