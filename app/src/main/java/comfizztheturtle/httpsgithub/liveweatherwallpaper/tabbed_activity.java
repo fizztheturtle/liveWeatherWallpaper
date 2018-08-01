@@ -120,12 +120,25 @@ public class tabbed_activity extends AppCompatActivity {
                 item_refresh = item;
                 // Create a count down timer which will count 60 seconds and invoke the timer object onTick() method every second.
                 final BroadcastService myCountDownTimer = new BroadcastService(60*1000, 1000);
+
                 // Set count down timer source activity.
                 myCountDownTimer.setSourceActivity(this);
+
                 // Start the count down timer.
                 myCountDownTimer.start();
+
+//                Find_Data fd=new Find_Data();
+//                fd.
+
+                try {
+                    get_weather_info();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 // Disable send verify code button.
                 item.setEnabled(false);
+
 
 //                AlertDialog alertDialog = new AlertDialog.Builder(CountDownTimerActivity.this).create();
 //                alertDialog.setMessage("Verification code has been send through sms. " +

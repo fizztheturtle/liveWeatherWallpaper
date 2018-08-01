@@ -28,7 +28,7 @@ public class Find_Data{
 
 
 //Need to implement this into one of the android classes
-    public static void main(String[] args) throws Exception {
+    public static void Find_Data() throws Exception {
 
         // write your code here
 
