@@ -31,7 +31,7 @@ public class image_class {
 
     public String get_link_to_file()
     {
-        return this.link_to_file ;
+        return this.link_to_file;
     }
 
 

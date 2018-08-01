@@ -18,14 +18,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import static comfizztheturtle.httpsgithub.liveweatherwallpaper.MyDBHandler.COLUMN_ID;
-import static comfizztheturtle.httpsgithub.liveweatherwallpaper.MyDBHandler.COLUMN_NAME;
-import static comfizztheturtle.httpsgithub.liveweatherwallpaper.MyDBHandler.TABLE_NAME;
+import comfizztheturtle.httpsgithub.liveweatherwallpaper.Find_Data;
+
 
 public class tabbed_activity extends AppCompatActivity {
 
@@ -39,6 +39,7 @@ public class tabbed_activity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    private final static Find_Data find_weather_data= new Find_Data();
 
 //    change broadcast service to timer
 
@@ -52,22 +53,22 @@ public class tabbed_activity extends AppCompatActivity {
     private MenuItem item_refresh;
 
     private final static String TAG = "BroadcastService";
-    MyDBHandler db;
+//    MyDBHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tabbed_activity);
-        db=new MyDBHandler(getApplicationContext());
+//        db=new MyDBHandler(getApplicationContext());
 
 //        startService(new Intent(this, BroadcastService.class));
 
-
-        try {
-            get_weather_info();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//
+//        try {
+//            get_weather_info();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -127,11 +128,9 @@ public class tabbed_activity extends AppCompatActivity {
                 // Start the count down timer.
                 myCountDownTimer.start();
 
-//                Find_Data fd=new Find_Data();
-//                fd.
-
+//
                 try {
-                    get_weather_info();
+                    add_weather_info();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -229,12 +228,28 @@ public class tabbed_activity extends AppCompatActivity {
     }
 
     //        memory leaks are possible
-    private void get_weather_info() throws Exception {
-        new image_class();
-        image_class weather_result = db.find_ID(0);
-        String ltf=weather_result.get_link_to_file();
-        int ltf2=Integer.parseInt(ltf);
-       finding_data.get_weather(this,ltf2);
+//    private void get_weather_info() throws Exception {
+//        new image_class();
+//        image_class weather_result = db.find_ID(0);
+//        Log.e(TAG, weather_result.toString());
+//        String ltf=weather_result.get_link_to_file();
+//        int ltf2=Integer.parseInt(ltf);
+//
+//    }
+
+    private void add_weather_info() throws Exception {
+//        new image_class();
+////        image_class weather_result = db.find_ID(0);
+//        Log.e(TAG, weather_result.toString());
+////        String ltf=weather_result.get_link_to_file();
+////        int ltf2=Integer.parseInt(ltf);
+//        finding_data.get_weather(this,0);
+
+new finding_data();
+    weather_data finding_weather_data = finding_data.add_weather(this,R.raw.api_key );
+
+        Log.e(TAG, find_weather_data.toString());
+
     }
 
 

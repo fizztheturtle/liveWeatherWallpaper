@@ -27,8 +27,12 @@ import java.util.Date;
 public class Find_Data{
 
 
+    public void main() throws Exception {
+        Finding_Data();
+    }
+
 //Need to implement this into one of the android classes
-    public static void Find_Data() throws Exception {
+    public void Finding_Data() throws Exception {
 
         // write your code here
 

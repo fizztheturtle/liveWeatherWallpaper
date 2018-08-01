@@ -16,6 +16,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,7 +30,7 @@ public class finding_data{
 //    }
 
     // write your code here
-    public static void get_weather(Context context,int resourceId) throws Exception {
+    public static weather_data add_weather(Context context,int resourceId) throws Exception {
 
 //    getResources().openRawResource(R.raw.api_key);
 //    URL url =  Find_Data.class.getResource("raw/api_key.txt");
@@ -101,17 +102,31 @@ public class finding_data{
 
         JSONArray Period = (JSONArray) location.get("Period");
 
+        weather_data weather_result= new weather_data();
+        ArrayList<String> period_array= new ArrayList<String>();
+
+        ArrayList<String> rep_array= new ArrayList<String>();
+        ArrayList<String> weather_type_array= new ArrayList<String>();
+        ArrayList<String> time_weather_array= new ArrayList<String>();
 
 
         for(Object periodObj: Period.toArray()){
             JSONObject period_2 = (JSONObject)periodObj;
+            period_array.add(periodObj.toString());
+
+
             JSONArray Rep = (JSONArray) period_2.get("Rep");
             System.out.println("\tPeriod: " + periodObj);
             for(Object repObj: Rep.toArray()){
                 JSONObject rep_2 = (JSONObject) repObj;
                 System.out.println("\t\t rep: " + rep_2);
+                rep_array.add(rep_2.toString());
+
+
                 String weather_type = (String) rep_2.get("W");
                 System.out.println("\t\t\t weather_type: " + weather_type);
+
+                weather_type_array.add(weather_type);
                 String $_temp = (String) rep_2.get("$");
                 int $= Integer.parseInt($_temp);
                 String myTime = "00:00";
@@ -122,12 +137,22 @@ public class finding_data{
                 cal.add(Calendar.MINUTE, $);
                 String newTime = df.format(cal.getTime());
                 System.out.println("\t\t\t $_temp: " + newTime);
+                time_weather_array.add(newTime);
                 //do something with the issue
             }
 
         }
 
-//        return 4;
+        weather_result.set_location(location.toString());
+        weather_result.set_period(period_array);
+        weather_result.set_rep(rep_array);
+        weather_result.set_weather_type(weather_type_array);
+        weather_result.set_time_weather(time_weather_array);
+
+
+//        weather_result.set_period(periodObj.);
+
+        return weather_result;
     }
 
     public static JSONObject readJsonFromUrl(String url) throws Exception {
