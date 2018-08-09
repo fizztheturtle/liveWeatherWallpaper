@@ -87,7 +87,7 @@ public class finding_data{
 
 
         // Make a URL to the web page
-        String url_API = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/310013?res=3hourly&key="+readLine;
+        String url_API = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/350473?res=3hourly&key="+readLine;
 
         JSONObject jsonObject = readJsonFromUrl(url_API);
 
@@ -103,7 +103,7 @@ public class finding_data{
         JSONArray Period = (JSONArray) location.get("Period");
 
         weather_data weather_result= new weather_data();
-        ArrayList<String> period_array= new ArrayList<String>();
+        ArrayList<String> period_array= new ArrayList <String>();
 
         ArrayList<String> rep_array= new ArrayList<String>();
         ArrayList<String> weather_type_array= new ArrayList<String>();

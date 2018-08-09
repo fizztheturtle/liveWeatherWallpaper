@@ -11,8 +11,6 @@ public class weather_data {
     private ArrayList<String> time_weather;
 
 
-    private int id_weather_type;
-
     weather_data() {}
 
     weather_data(String location, ArrayList<String> period, ArrayList<String> rep,

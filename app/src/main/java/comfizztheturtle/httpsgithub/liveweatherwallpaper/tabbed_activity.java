@@ -245,7 +245,7 @@ public class tabbed_activity extends AppCompatActivity {
 ////        int ltf2=Integer.parseInt(ltf);
 //        finding_data.get_weather(this,0);
 
-new finding_data();
+    new finding_data();
     weather_data finding_weather_data = finding_data.add_weather(this,R.raw.api_key );
 
         Log.e(TAG, find_weather_data.toString());
