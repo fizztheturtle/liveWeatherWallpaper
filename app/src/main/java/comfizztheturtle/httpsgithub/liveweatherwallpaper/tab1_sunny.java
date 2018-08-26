@@ -107,7 +107,7 @@ public class tab1_sunny extends Fragment {
                 options.inSampleSize = 8;
             }
             else {
-                options.inSampleSize=2;
+                options.inSampleSize=4;
             }
             selectedImage = BitmapFactory.decodeFile(ltf.getPath(),options);
             new_image_device.setImageBitmap(selectedImage);

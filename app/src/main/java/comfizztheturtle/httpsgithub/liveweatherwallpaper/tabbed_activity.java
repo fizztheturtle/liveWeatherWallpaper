@@ -120,7 +120,7 @@ public class tabbed_activity extends AppCompatActivity {
             case R.id.refresh:
                 item_refresh = item;
                 // Create a count down timer which will count 60 seconds and invoke the timer object onTick() method every second.
-                final BroadcastService myCountDownTimer = new BroadcastService(60*1000, 1000);
+                final BroadcastService myCountDownTimer = new BroadcastService(86400*1000, 1000);
 
                 // Set count down timer source activity.
                 myCountDownTimer.setSourceActivity(this);

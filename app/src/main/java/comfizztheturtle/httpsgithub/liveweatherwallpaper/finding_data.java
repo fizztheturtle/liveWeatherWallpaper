@@ -87,7 +87,10 @@ public class finding_data{
 
 
         // Make a URL to the web page
-        String url_API = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/350473?res=3hourly&key="+readLine;
+        // Greater Manc=353545
+        //blackley=350473
+
+        String url_API = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/351990?res=3hourly&key="+readLine;
 
         JSONObject jsonObject = readJsonFromUrl(url_API);
 
